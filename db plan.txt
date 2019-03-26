@@ -1,0 +1,15 @@
+collection:tags
+    doc:tag
+        popularity rating
+        ...details about the tag (date)
+        collection:cards
+            doc:card
+                ...details pertaining to the card
+                question
+                body
+                dateCreated
+                dateAnswered
+                answered
+                collection:comments
+                    doc:
+                        ...details pertaining to the comment
