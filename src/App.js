@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import thing from "./comp2.js"
-
-var {Title, PanelGroup} = thing
-// console.log(Title, Panel)
-// var Panel = thing.Panel
+import PanelGroup from "./panelGroup.js"
+import {Title} from "./panels.js"
 
 
 
