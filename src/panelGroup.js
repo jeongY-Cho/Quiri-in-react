@@ -109,7 +109,12 @@ class PanelGroup extends Component {
   async componentDidMount() {
 
     let tags = await db.collection("Active").get()
-    tags = tags.docs.map(tag => tag.id)
+    tags = tags.docs.map(tag => {
+      return {
+        tag:tag.id,
+        id:tag.id
+      }
+    })
     console.log(tags);
 
     let panel = Object.assign({}, this.state.tagPanel)
