@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import PanelGroup from "./panelGroup.js"
-import {Title} from "./panels.js"
+import Title from "./title.js"
 
 
 

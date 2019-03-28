@@ -1,5 +1,7 @@
 import React, {Component} from "react"
-import {TagPanel, CardPanel, CommentPanel} from "./panels.js"
+import TagPanel from "./panels/tagPanel.js"
+import CardPanel from "./panels/cardPanel.jsx"
+import CommentPanel from "./panels/commentPanel.js"
 
 
 // initialize firebase
