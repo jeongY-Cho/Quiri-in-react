@@ -23,7 +23,7 @@ class PanelGroup extends Component {
     this.increment = this.increment.bind(this)
     this.searchTags = this.searchTags.bind(this)
 
-    let panel1 = {
+    let tagPanel = {
       type: "tags",
       title: "Tags",
       state: "extended",
@@ -58,7 +58,7 @@ class PanelGroup extends Component {
 
 
     this.state = {
-      tagPanel: panel1,
+      tagPanel: tagPanel,
       cardPanel: panel2,
       commentPanel: panel3
     }
@@ -116,7 +116,7 @@ class PanelGroup extends Component {
 
     panel.listItems.items = tags
     this.setState({
-      panel1:panel
+      tagPanel:panel
     })
   }
   render() {
