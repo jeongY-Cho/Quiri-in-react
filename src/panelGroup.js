@@ -35,7 +35,7 @@ class PanelGroup extends Component {
       },
       onClick:this.searchTags,
     }
-    let panel2 = {
+    let cardPanel = {
       type: "cards",
       title: "Cards",
       state: "extended",
@@ -46,7 +46,7 @@ class PanelGroup extends Component {
       onClick:this.increment,
       inc: 0
     }
-    let panel3 = {
+    let commentPanel = {
       type: "comments",
       title: "Comments",
       state: "extended",
@@ -61,8 +61,8 @@ class PanelGroup extends Component {
 
     this.state = {
       tagPanel: tagPanel,
-      cardPanel: panel2,
-      commentPanel: panel3
+      cardPanel: cardPanel,
+      commentPanel: commentPanel
     }
   }
 
@@ -85,7 +85,10 @@ class PanelGroup extends Component {
       let data = card.data()
 
       let question = data.question
-      let body = data.body.substring(0, 100) + "..."
+      let body = data.body
+      if (body.length === 100) {
+        body = body.substring(0, 100) + "..."
+      }
       let answered = data.answered
       let timeCreated = data.timeCreated
 
@@ -129,7 +132,7 @@ class PanelGroup extends Component {
   render() {
 
     return (
-      <div>
+      <div className="container">
         <TagPanel type={this.state.tagPanel.type} state={this.state.tagPanel.state} onClick={this.state.tagPanel.onClick} id="tagPanel" listItems={this.state.tagPanel.listItems}/>
         <CardPanel type={this.state.cardPanel.type} state={this.state.cardPanel.state} onClick={this.state.cardPanel.onClick} id="cardPanel" listItems={this.state.cardPanel.listItems}/>
         <CommentPanel type={this.state.commentPanel.type} state={this.state.commentPanel.state} onClick={this.state.commentPanel.onClick} id="commentPanel" listItems={this.state.commentPanel.listItems}/>
@@ -137,5 +140,6 @@ class PanelGroup extends Component {
     )
   }
 }
+
 
 export default PanelGroup
