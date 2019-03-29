@@ -23,7 +23,7 @@ class PanelGroup extends Component {
     super(props)
 
     this.increment = this.increment.bind(this)
-    this.searchTags = this.searchTags.bind(this)
+    this.getCardsByTag = this.getCardsByTag.bind(this)
 
     let tagPanel = {
       type: "tags",
@@ -33,7 +33,7 @@ class PanelGroup extends Component {
       listItems: {
         items: []
       },
-      onClick:this.searchTags,
+      onClick:this.getCardsByTag,
     }
     let cardPanel = {
       type: "cards",
@@ -76,7 +76,7 @@ class PanelGroup extends Component {
     })
   }
 
-  async searchTags(e) {
+  async getCardsByTag(e) {
     let tag = e.target.id
     let cards = await db.collection("Active").doc(tag).collection("cards").get()
     cards = cards.docs
