@@ -60,7 +60,7 @@ class TagPanel extends Component {
     let list = this.state.items.map((tag) => <Tag onClick={this.props.onClick} key={tag.id} tag={tag.tag} id="panel1" />)
     // <div id="panel1">{this.props.type} {list}</div>)
     return (
-      <div id={this.props.type + "Panel"} className="bg-primary">
+      <span id={this.props.type + "Panel"} className="bg-primary">
         <h1 className="heading text-light">{title}</h1>
         <p className="text-light">{subTitle}<br />{this.state.state}</p>
         <div className="form-inline justify-content-center p-1">
@@ -69,7 +69,7 @@ class TagPanel extends Component {
         <div id={this.props.type + "List"}>
           {list}
         </div>
-      </div>
+      </span>
 
     )
   }
