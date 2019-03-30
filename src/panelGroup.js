@@ -10,7 +10,6 @@ class PanelGroup extends Component {
   constructor(props) {
     super(props)
 
-    this.increment = this.increment.bind(this)
     this.getCardsByTag = this.getCardsByTag.bind(this)
     this.getCommentsByCard = this.getCommentsByCard.bind(this)
     this.closeCommentPanel = this.closeCommentPanel.bind(this)
@@ -18,7 +17,6 @@ class PanelGroup extends Component {
     let tagPanel = {
       type: "tags",
       title: "Tags",
-      state: "extended",
       subTitle: "Click a Tag below to view cards with that tag.",
       listItems: {
         items: []
@@ -28,7 +26,6 @@ class PanelGroup extends Component {
     let cardPanel = {
       type: "cards",
       title: "Cards",
-      state: "extended",
       subTitle: "Click a Tag below to view cards with that tag.",
       listItems: {
         items: []
@@ -38,13 +35,10 @@ class PanelGroup extends Component {
     let commentPanel = {
       type: "comments",
       title: "Comments",
-      state: "extended",
       subTitle: "Click a Tag below to view cards with that tag.",
       listItems: {
         items: []
       },
-      onClick: this.increment,
-      inc: 0
       closePanel: this.closeCommentPanel
     }
 
@@ -52,7 +46,12 @@ class PanelGroup extends Component {
     this.state = {
       tagPanel: tagPanel,
       cardPanel: cardPanel,
-      commentPanel: commentPanel
+      commentPanel: commentPanel,
+      tagId: '',
+      cardId: '',
+      tagState: "extended",
+      cardState: "closed",
+      commentState: "closed"
     }
   }
 
@@ -82,13 +81,16 @@ class PanelGroup extends Component {
       }
     })
 
-    console.log(cards);
     let cardPanel = Object.assign({}, this.state.cardPanel)
 
     cardPanel.listItems.items = cards
 
     this.setState({
-      cardPanel:cardPanel
+      cardPanel:cardPanel,
+      tagId: tag,
+      tagState: "open",
+      cardState: "extended",
+      commentState: "closed",
     })
   }
 
