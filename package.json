@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@bit/davidhu2000.react-spinners.bar-loader": "^0.5.1",
     "firebase": "^5.9.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",

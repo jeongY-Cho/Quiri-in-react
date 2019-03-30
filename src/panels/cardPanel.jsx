@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Card } from '../listItems.js'
+import BarLoader from '@bit/davidhu2000.react-spinners.bar-loader'
 
 class CardPanel extends Component {
   constructor(props) {
@@ -61,7 +62,7 @@ class CardPanel extends Component {
 
     console.log(list);
     if (list.length === 0) {
-      list = (<h1>Nothing</h1>)
+      list = (<div><BarLoader /></div>)
     } else {
       list = list.map((card) => <Card className="row card" answered={card.answered} key={card.id} id={card.id} timeCreated={card.timeCreated} question={card.question} body={card.body} />)
     }
