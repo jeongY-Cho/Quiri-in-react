@@ -71,18 +71,20 @@ class TagPanel extends Component {
         divStyle.width = "25%"
     }
 
+
     return (
-      <span id={this.props.type + "Panel"} className="bg-primary">
-        <h1 className="heading text-light">{title}</h1>
-        <p className="text-light">{subTitle}<br />{this.state.state}</p>
-        <div className="form-inline justify-content-center p-1">
+      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle}>
+      <div className="p-2">
+        <h1>{title}</h1>
+        <p>{subTitle}<br />{this.state.state}</p>
+        <div className="justify-content-center mb-2">
           <input type="text" className="form-control" placeholder="Search" id="searchTags" value={this.state.query} onChange={this.handleChange}/>
         </div>
         <div id={this.props.type + "List"}>
           {list}
         </div>
-      </span>
-
+        </div>
+      </div>
     )
   }
 }
