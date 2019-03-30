@@ -10,6 +10,7 @@ class PanelGroup extends Component {
   constructor(props) {
     super(props)
 
+    // bind functions
     this.getCardsByTag = this.getCardsByTag.bind(this)
     this.getCommentsByCard = this.getCommentsByCard.bind(this)
     this.closeCommentPanel = this.closeCommentPanel.bind(this)
@@ -57,11 +58,9 @@ class PanelGroup extends Component {
 
 
   async getCardsByTag(e) {
-    let tag = e.target.id
+    let tag = e.currentTarget.id
     let cards = await db.collection("Active").doc(tag).collection("cards").get()
-    cards = cards.docs
-
-    cards = cards.map(card => {
+    cards = cards.docs.map(card => {
       let data = card.data()
 
       let question = data.question
