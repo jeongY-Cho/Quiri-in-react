@@ -17,17 +17,20 @@ class Tag extends Component {
 
 class Card extends Component {
   render () {
-    let answered = this.props.answered ? <p>answered</p> : null
-    return (
-      <span onClick={null} id={this.props.id}>
-        <div className="card-body p-1">
-          <h4 className="card-title text-left">{this.props.question}</h4>
-          <h6 className="comment">{this.props.body}</h6>
-          <p className="time">Created: {this.props.timeCreated.toDate().toString()}</p>
-          {answered}
-        </div>
-    </span>
 
+    let cardStyle = {
+      cursor:"pointer",
+    }
+
+    let answered = this.props.answered ? <span className="badge badge-primary">Answered</span> : null
+    return (
+        <div style={cardStyle} className="card mb-1" onClick={this.props.onClick} id={this.props.id}>
+          <div className="card-body">
+            <h5 className="card-title">{this.props.question} {answered}</h5>
+            <h6 className="card-text">{this.props.body}</h6>
+            <p className="card-subtitle text-muted">Created: {this.props.timeCreated.toDate().toString()}</p>
+          </div>
+        </div>
     )
   }
 }
