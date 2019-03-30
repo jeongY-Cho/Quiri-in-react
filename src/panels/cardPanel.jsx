@@ -60,7 +60,6 @@ class CardPanel extends Component {
 
     let list = this.state.items
 
-    console.log(list);
     if (list.length === 0) {
       list = (<div><BarLoader /></div>)
     } else {

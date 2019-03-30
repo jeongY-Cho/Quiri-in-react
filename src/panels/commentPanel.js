@@ -6,8 +6,6 @@ class CommentPanel extends Component {
   constructor(props) {
     super(props)
 
-    // define this.additions so it doesnt break
-    this.additions = []
     // bind methods
     this.newComment = this.newComment.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -16,7 +14,8 @@ class CommentPanel extends Component {
       query: "",
       items: [] ,
       internal: false,
-      comment: ""
+      comment: "",
+      additions: [],
     }
   }
   static getDerivedStateFromProps(props, state) {
@@ -28,6 +27,7 @@ class CommentPanel extends Component {
       items: props.listItems.items,  //  set any updates
       query: '',                     //  reset query
       internal: false,                // set interal update to false just in case
+      additions: []
     }
   }
 
@@ -35,15 +35,17 @@ class CommentPanel extends Component {
     console.log(e);
     e.preventDefault()
 
-
-    this.additions.push({
+    let additions = this.state.additions.slice()
+    additions.push({
       id: new Date(),
       body: this.state.comment
-
     })
+    console.log(additions);
 
     this.setState({
-      comment: ""
+      comment: "",
+      additions,
+      internal: true
     })
   }
 
@@ -51,9 +53,10 @@ class CommentPanel extends Component {
     this.setState({comment: e.target.value})
   }
 
+
   render() {
 
-    let title = "Tags"
+    let title = this.props.cardId
     let subTitle = "Click a tag to see cards"
 
     let colorLight = true
@@ -75,8 +78,8 @@ class CommentPanel extends Component {
       default:
         divStyle.width = "0%"
     }
-
-    let additions = this.additions.map((comment) => {
+    console.log(this.state.additions);
+    let additions = this.state.additions.map((comment) => {
       colorLight = !colorLight
 
       return <Comment colorLight={colorLight} key={comment.id} comment={comment.body} timeCreated={comment.timeCreated} id={comment.id} />
