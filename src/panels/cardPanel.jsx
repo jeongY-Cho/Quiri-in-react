@@ -69,17 +69,18 @@ class CardPanel extends Component {
 
     // <div id="panel1">{this.props.type} {list}</div>)
     return (
-      <span id={this.props.type + "Panel"} className="bg-primary card">
+      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle}>
+      <div className="p-2">
         <h1 className="heading">{title}</h1>
         <p>{subTitle}<br />{this.state.state}</p>
-        <div className="form-inline justify-content-center p-1">
+        <div className="mb-2">
           <input type="text" className="form-control" placeholder="Search" id="searchCards" value={this.state.query} onChange={this.handleChange}/>
         </div>
         <div id={this.props.type + "List"}>
           {list}
         </div>
-      </span>
-
+      </div>
+      </div>
     )
   }
 }
