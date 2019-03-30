@@ -64,7 +64,7 @@ class CardPanel extends Component {
     if (list.length === 0) {
       list = (<div><BarLoader /></div>)
     } else {
-      list = list.map((card) => <Card className="row card" answered={card.answered} key={card.id} id={card.id} timeCreated={card.timeCreated} question={card.question} body={card.body} />)
+      list = list.map((card) => <Card onClick={this.props.onClick} answered={card.answered} key={card.id} id={card.id} timeCreated={card.timeCreated} question={card.question} body={card.body} />)
     }
 
     // <div id="panel1">{this.props.type} {list}</div>)
