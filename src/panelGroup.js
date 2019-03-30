@@ -156,9 +156,11 @@ class PanelGroup extends Component {
 
     return (
       <div className="container">
-        <TagPanel type={this.state.tagPanel.type} state={this.state.tagPanel.state} onClick={this.state.tagPanel.onClick} id="tagPanel" listItems={this.state.tagPanel.listItems}/>
-        <CardPanel type={this.state.cardPanel.type} state={this.state.cardPanel.state} onClick={this.state.cardPanel.onClick} id="cardPanel" listItems={this.state.cardPanel.listItems}/>
-        <CommentPanel type={this.state.commentPanel.type} state={this.state.commentPanel.state} onClick={this.state.commentPanel.onClick} id="commentPanel" listItems={this.state.commentPanel.listItems}/>
+        <div className="row">
+          <TagPanel className="transitory bg-light" type={this.state.tagPanel.type} state={this.state.tagState} onClick={this.state.tagPanel.onClick} id="tagPanel" listItems={this.state.tagPanel.listItems}/>
+          <CardPanel className="transitory" type={this.state.cardPanel.type} state={this.state.cardState} onClick={this.state.cardPanel.onClick} id="cardPanel" listItems={this.state.cardPanel.listItems}/>
+          <CommentPanel className="transitory" type={this.state.commentPanel.type} state={this.state.commentState} onClick={this.state.commentPanel.onClick} closePanel={this.closeCommentPanel} id="commentPanel" listItems={this.state.commentPanel.listItems}/>
+        </div>
       </div>
     )
   }
