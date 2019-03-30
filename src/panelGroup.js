@@ -12,6 +12,7 @@ class PanelGroup extends Component {
 
     this.increment = this.increment.bind(this)
     this.getCardsByTag = this.getCardsByTag.bind(this)
+    this.getCommentsByCard = this.getCommentsByCard.bind(this)
 
     let tagPanel = {
       type: "tags",
@@ -31,8 +32,7 @@ class PanelGroup extends Component {
       listItems: {
         items: []
       },
-      onClick:this.increment,
-      inc: 0
+      onClick:this.getCommentsByCard,
     }
     let commentPanel = {
       type: "comments",
@@ -54,15 +54,6 @@ class PanelGroup extends Component {
     }
   }
 
-  increment(e) {
-    console.log(e.target);
-    let panel = Object.assign({}, this.state[e.target.id])
-    panel.listItems.items.push("thing ")
-
-    this.setState({
-      [e.target.id]: panel
-    })
-  }
 
   async getCardsByTag(e) {
     let tag = e.target.id
@@ -99,6 +90,40 @@ class PanelGroup extends Component {
     })
   }
 
+  async getCommentsByCard(e) {
+    let cardId = e.currentTarget.id
+    console.log(cardId);
+    let comments = await db
+      .collection("Active")
+      .doc(this.state.tagId)
+      .collection("cards")
+      .doc(cardId)
+      .collection("comments")
+      .get()
+    comments = await comments.docs.map(comment => {
+      let data = comment.data()
+      console.log(data);
+      let body = data.body
+      let timeCreated = data.timeCreated
+      let commentId = comment.id
+      return {
+        body,
+        timeCreated,
+        id: commentId
+      }
+    })
+
+    let commentPanel = Object.assign({}, this.state.commentPanel)
+    commentPanel.listItems.items = comments
+    console.log(commentPanel);
+    this.setState({
+      cardId,
+      commentPanel,
+      tagState: "open",
+      cardState: "open",
+      commentState: "extended"
+    })
+  }
   async componentDidMount() {
 
     let tags = await db.collection("Active").get()
