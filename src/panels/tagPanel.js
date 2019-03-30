@@ -59,6 +59,18 @@ class TagPanel extends Component {
 
     let list = this.state.items.map((tag) => <Tag onClick={this.props.onClick} key={tag.id} tag={tag.tag} id="panel1" />)
     // <div id="panel1">{this.props.type} {list}</div>)
+    let divStyle = {width:0}
+    switch (this.props.state) {
+      case "extended":
+        divStyle.width = "50%"
+        break
+      case "open":
+        divStyle.width = "25%"
+        break
+      default:
+        divStyle.width = "25%"
+    }
+
     return (
       <span id={this.props.type + "Panel"} className="bg-primary">
         <h1 className="heading text-light">{title}</h1>

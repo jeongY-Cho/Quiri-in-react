@@ -67,6 +67,19 @@ class CardPanel extends Component {
       list = list.map((card) => <Card onClick={this.props.onClick} answered={card.answered} key={card.id} id={card.id} timeCreated={card.timeCreated} question={card.question} body={card.body} />)
     }
 
+    let divStyle = {width:0}
+    switch (this.props.state) {
+      case "extended":
+        divStyle.width = "40%"
+        break
+      case "open":
+        divStyle.width = "25%"
+        break
+      default:
+        divStyle.width = "0px"
+    }
+
+
     // <div id="panel1">{this.props.type} {list}</div>)
     return (
       <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle}>
