@@ -6,7 +6,6 @@ class Tag extends Component {
     let tagStyle = {
       "fontSize":"30px",
       cursor:"pointer",
-      "textAlign":"center"
     }
     return (
       <div style={tagStyle} onClick={this.props.onClick} id={this.props.tag}><h1 className="title card pl-2 pb-2">&#9776; {this.props.tag}</h1></div>
