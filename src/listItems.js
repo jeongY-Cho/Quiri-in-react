@@ -9,7 +9,7 @@ class Tag extends Component {
       "textAlign":"center"
     }
     return (
-      <span style={tagStyle} onClick={this.props.onClick}><h1 className="title" id={this.props.tag}>&#9776; {this.props.tag}</h1></span>
+      <div style={tagStyle} onClick={this.props.onClick} id={this.props.tag}><h1 className="title card pl-2 pb-2">&#9776; {this.props.tag}</h1></div>
       // <div><button onClick={this.props.onClick}><h1 className="title" id={this.props.tag}>&#9776; {this.props.tag}</h1></button></div>
     )
   }
