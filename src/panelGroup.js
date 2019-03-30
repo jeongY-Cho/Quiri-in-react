@@ -13,6 +13,7 @@ class PanelGroup extends Component {
     this.increment = this.increment.bind(this)
     this.getCardsByTag = this.getCardsByTag.bind(this)
     this.getCommentsByCard = this.getCommentsByCard.bind(this)
+    this.closeCommentPanel = this.closeCommentPanel.bind(this)
 
     let tagPanel = {
       type: "tags",
@@ -44,6 +45,7 @@ class PanelGroup extends Component {
       },
       onClick: this.increment,
       inc: 0
+      closePanel: this.closeCommentPanel
     }
 
 
@@ -140,6 +142,14 @@ class PanelGroup extends Component {
     panel.listItems.items = tags
     this.setState({
       tagPanel:panel
+    })
+  }
+
+  closeCommentPanel(e) {
+    console.log("click");
+    this.setState({
+      commentState: "closed",
+      cardState: "extended"
     })
   }
   render() {
