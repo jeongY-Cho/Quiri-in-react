@@ -37,10 +37,23 @@ class Card extends Component {
 
 class Comment extends Component {
   render() {
+
+    let timeStamp
+    if (this.props.timeCreated) {
+      timeStamp = this.props.timeCreated.toDate().toString()
+    } else {
+      timeStamp = null
+    }
+
+    let className = ["p-2", "list-group-item"]
+    if (this.props.colorLight) {
+      className.push("bg-light")
+    }
+
     return (
-      <div className="card comCard">
+      <div className={className.join(" ")}>
         <h5 className="comment">{this.props.comment}</h5>
-        <p className="time">Time: {this.props.timeStamp}</p>
+        <p className="time">Time: {timeStamp}</p>
       </div>
     )
   }
