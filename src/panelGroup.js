@@ -105,7 +105,6 @@ class PanelGroup extends Component {
       .get()
     comments = await comments.docs.map(comment => {
       let data = comment.data()
-      console.log(data);
       let body = data.body
       let timeCreated = data.timeCreated
       let commentId = comment.id
@@ -127,6 +126,7 @@ class PanelGroup extends Component {
       commentState: "extended"
     })
   }
+
   async componentDidMount() {
 
     let tags = await db.collection("Active").get()
@@ -182,7 +182,7 @@ class PanelGroup extends Component {
             closePanel={this.closeCommentPanel}
             id="commentPanel"
             listItems={this.state.commentPanel.listItems}
-            cardId={this.state.commentPanel.cardId}
+            cardId={this.state.cardId}
           />
 
         </div>
