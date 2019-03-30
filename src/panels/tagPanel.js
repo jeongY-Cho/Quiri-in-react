@@ -57,8 +57,8 @@ class TagPanel extends Component {
     let title = "Tags"
     let subTitle = "Click a tag to see cards"
 
-    let list = this.state.items.map((tag) => <Tag onClick={this.props.onClick} key={tag.id} tag={tag.tag} id="panel1" />)
-    // <div id="panel1">{this.props.type} {list}</div>)
+    let list = this.state.items.map((tag) => <Tag onClick={this.props.onClick} key={tag.id} tag={tag.tag} id={tag.id} />)
+
     let divStyle = {width:0}
     switch (this.props.state) {
       case "extended":
