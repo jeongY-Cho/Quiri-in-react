@@ -1,4 +1,6 @@
 import React, { Component } from "react"
+import BarLoader from '@bit/davidhu2000.react-spinners.bar-loader'
+
 
 class Tag extends Component {
   render() {
@@ -58,6 +60,13 @@ class Comment extends Component {
       className.push("bg-light")
     }
 
+    if (this.props.posting) {
+      return (
+        <div className={className.join(" ")}>
+          <BarLoader />
+        </div>
+      )
+    }
     return (
       <div className={className.join(" ")}>
         <h5 className="comment">{this.props.comment}</h5>
