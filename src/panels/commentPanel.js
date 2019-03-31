@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Comment } from '../listItems.js'
+import { Timestamp, db } from "../firestore.js"
 
 
 class CommentPanel extends Component {
@@ -31,14 +32,18 @@ class CommentPanel extends Component {
     }
   }
 
-  newComment(e) {
+  async newComment(e) {
     e.preventDefault()
 
     let additions = this.state.additions.slice()
-    additions.push({
+    const data = {
       id: new Date(),
-      body: this.state.comment
-    })
+      body: this.state.comment,
+      timeCreated: Timestamp()
+    };
+    additions.push(data)
+
+    await db.collection("cards").doc(this.props.cardId).collection("comments").add(data)
 
     this.setState({
       comment: "",
