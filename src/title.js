@@ -21,7 +21,7 @@ class Title extends Component {
   componentWillUnmount() {
     clearInterval(this.interval)
   }
-  render () {
+  render() {
     let text;
     if (this.state.isName) {
       text = this.props.name
@@ -29,8 +29,13 @@ class Title extends Component {
       text = "Hello"
     }
     return (
-      <div>
-        <h1>{text}</h1>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-3">
+            <h1>{text}</h1>
+          </div>
+          <button onClick={this.props.showForm}>showForm</button>
+        </div>
       </div>
     )
   }
