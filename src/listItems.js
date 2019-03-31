@@ -4,11 +4,19 @@ class Tag extends Component {
   render () {
 
     let tagStyle = {
-      "fontSize":"30px",
-      cursor:"pointer",
+      cursor: "pointer",
+      fontSize: "inherit",
+      transition: "all 0.5s linear",
+      overflowX: "auto",
+      whiteSpace: "nowrap",
+    }
+    let h1Style = {
+      fontSize: "inherit"
     }
     return (
-      <div style={tagStyle} onClick={this.props.onClick} id={this.props.tag}><h1 className="title card pl-2 pb-2">&#9776; {this.props.tag}</h1></div>
+      <div className="tab list-group-item" style={tagStyle} onClick={this.props.onClick} id={this.props.tag}><h1 style={h1Style} className="title">&#9776; {this.props.tag}&nbsp;</h1></div>
+      // <div style={tagStyle} onClick={this.props.onClick} id={this.props.tag} className="title card pl-2 pb-2">&#9776; {this.props.tag}</div>
+
       // <div><button onClick={this.props.onClick}><h1 className="title" id={this.props.tag}>&#9776; {this.props.tag}</h1></button></div>
     )
   }
