@@ -1,3 +1,4 @@
+import { networkInterfaces } from "os";
 
 
 // initialize firebase
@@ -14,4 +15,8 @@ require("firebase/firestore")
 firebase.initializeApp(config)
 let db = firebase.firestore()
 
-export default db
+// Timestamp method to make unified timestamp type across whole app 
+let Timestamp = function () {return firebase.firestore.Timestamp.fromMillis(Date.now())}
+
+
+export {db, Timestamp}
