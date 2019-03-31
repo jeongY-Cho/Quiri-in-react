@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Tag } from "../listItems.js"
 
 class TagPanel extends Component {
@@ -8,13 +8,13 @@ class TagPanel extends Component {
 
     this.state = {
       query: "",
-      items: [] ,
+      items: [],
       internal: false,
     }
   }
   static getDerivedStateFromProps(props, state) {
-    if ( state.internal === true ) {  //  ignore if internal update to state
-      return {internal:false}
+    if (state.internal === true) {  //  ignore if internal update to state
+      return { internal: false }
     }
     // set props as state if its not an internal update
     return {
@@ -27,7 +27,7 @@ class TagPanel extends Component {
   searchTags(query) {
     let result = this.props.listItems.items
       .slice()
-      .filter(function(item) {
+      .filter(function (item) {
         let values = Object.values(item)
 
         for (let value of values) {
@@ -40,7 +40,7 @@ class TagPanel extends Component {
     return result
   }
 
-  handleChange(e){
+  handleChange(e) {
     let query = e.target.value.trim()
     let items = this.searchTags(query)
 
@@ -59,13 +59,18 @@ class TagPanel extends Component {
 
     let list = this.state.items.map((tag) => <Tag onClick={this.props.onClick} key={tag.id} tag={tag.tag} id={tag.id} />)
 
-    let divStyle = {width:0}
+    let divStyle = { width: 0 }
+    let listStyle = { fontSize: "30px" }
     switch (this.props.state) {
       case "extended":
         divStyle.width = "50%"
         break
       case "open":
         divStyle.width = "25%"
+        break
+      case "shrunk":
+        divStyle.width = "20%"
+        listStyle.fontSize = "18px"
         break
       default:
         divStyle.width = "25%"
@@ -74,15 +79,15 @@ class TagPanel extends Component {
 
     return (
       <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle}>
-      <div className="p-2">
-        <h1>{title}</h1>
-        <p>{subTitle}<br />{this.state.state}</p>
-        <div className="justify-content-center mb-2">
-          <input type="text" className="form-control" placeholder="Search" id="searchTags" value={this.state.query} onChange={this.handleChange}/>
-        </div>
-        <div id={this.props.type + "List"}>
-          {list}
-        </div>
+        <div className="p-2">
+          <h1>{title}</h1>
+          <p>{subTitle}<br />{this.state.state}</p>
+          <div className="justify-content-center mb-2">
+            <input type="text" className="form-control" placeholder="Search" id="searchTags" value={this.state.query} onChange={this.handleChange} />
+          </div>
+          <ul id={this.props.type + "List"} style={listStyle} className="list-group">
+            {list}
+          </ul>
         </div>
       </div>
     )

@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import React, { Component } from "react"
 import TagPanel from "./panels/tagPanel.js"
 import CardPanel from "./panels/cardPanel.jsx"
 import CommentPanel from "./panels/commentPanel.js"
@@ -22,7 +22,7 @@ class PanelGroup extends Component {
       listItems: {
         items: []
       },
-      onClick:this.getCardsByTag,
+      onClick: this.getCardsByTag,
     }
     let cardPanel = {
       type: "cards",
@@ -31,7 +31,7 @@ class PanelGroup extends Component {
       listItems: {
         items: []
       },
-      onClick:this.getCommentsByCard,
+      onClick: this.getCommentsByCard,
     }
     let commentPanel = {
       type: "comments",
@@ -85,7 +85,7 @@ class PanelGroup extends Component {
     cardPanel.listItems.items = cards
 
     this.setState({
-      cardPanel:cardPanel,
+      cardPanel: cardPanel,
       tagId: tag,
       tagState: "open",
       cardState: "extended",
@@ -121,7 +121,7 @@ class PanelGroup extends Component {
     this.setState({
       cardId,
       commentPanel,
-      tagState: "open",
+      tagState: "shrunk",
       cardState: "open",
       commentState: "extended"
     })
@@ -132,8 +132,8 @@ class PanelGroup extends Component {
     let tags = await db.collection("Active").get()
     tags = tags.docs.map(tag => {
       return {
-        tag:tag.id,
-        id:tag.id
+        tag: tag.id,
+        id: tag.id
       }
     })
     console.log(tags);
@@ -142,21 +142,23 @@ class PanelGroup extends Component {
 
     panel.listItems.items = tags
     this.setState({
-      tagPanel:panel
+      tagPanel: panel
     })
   }
 
   closeCommentPanel(e) {
     console.log("click");
     this.setState({
-      commentState: "closed",
-      cardState: "extended"
+      cardState: "extended",
+      tagState: "open",
+      commentState: "closed"
+
     })
   }
   render() {
 
     return (
-      <div className="container">
+      <div className="container-fluid">
         <div className="row">
           <TagPanel
             className="transitory bg-light"

@@ -9,13 +9,13 @@ class CardPanel extends Component {
 
     this.state = {
       query: "",
-      items: [] ,
+      items: [],
       internal: false,
     }
   }
   static getDerivedStateFromProps(props, state) {
-    if ( state.internal === true ) {  //  ignore if internal update to state
-      return {internal:false}
+    if (state.internal === true) {  //  ignore if internal update to state
+      return { internal: false }
     }
     // set props as state if its not an internal update
     return {
@@ -28,7 +28,7 @@ class CardPanel extends Component {
   searchTags(query) {
     let result = this.props.listItems.items
       .slice()
-      .filter(function(item) {
+      .filter(function (item) {
         let values = Object.values(item)
 
         for (let value of values) {
@@ -41,7 +41,7 @@ class CardPanel extends Component {
     return result
   }
 
-  handleChange(e){
+  handleChange(e) {
     let query = e.target.value.trim()
     let items = this.searchTags(query)
 
@@ -66,7 +66,7 @@ class CardPanel extends Component {
       list = list.map((card) => <Card onClick={this.props.onClick} answered={card.answered} key={card.id} id={card.id} timeCreated={card.timeCreated} question={card.question} body={card.body} />)
     }
 
-    let divStyle = {width:0}
+    let divStyle = { width: 0 }
     switch (this.props.state) {
       case "extended":
         divStyle.width = "40%"
@@ -82,16 +82,16 @@ class CardPanel extends Component {
     // <div id="panel1">{this.props.type} {list}</div>)
     return (
       <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle}>
-      <div className="p-2">
-        <h1 className="heading">{title}</h1>
-        <p>{subTitle}<br />{this.state.state}</p>
-        <div className="mb-2">
-          <input type="text" className="form-control" placeholder="Search" id="searchCards" value={this.state.query} onChange={this.handleChange}/>
+        <div className="p-2">
+          <h1 className="heading">{title}</h1>
+          <p>{subTitle}<br />{this.state.state}</p>
+          <div className="mb-2">
+            <input type="text" className="form-control" placeholder="Search" id="searchCards" value={this.state.query} onChange={this.handleChange} />
+          </div>
+          <div id={this.props.type + "List"}>
+            {list}
+          </div>
         </div>
-        <div id={this.props.type + "List"}>
-          {list}
-        </div>
-      </div>
       </div>
     )
   }

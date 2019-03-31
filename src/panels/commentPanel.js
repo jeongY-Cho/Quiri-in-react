@@ -12,15 +12,15 @@ class CommentPanel extends Component {
 
     this.state = {
       query: "",
-      items: [] ,
+      items: [],
       internal: false,
       comment: "",
       additions: [],
     }
   }
   static getDerivedStateFromProps(props, state) {
-    if ( state.internal === true ) {  //  ignore if internal update to state
-      return {internal:false}
+    if (state.internal === true) {  //  ignore if internal update to state
+      return { internal: false }
     }
     // set props as state if its not an internal update
     return {
@@ -32,7 +32,6 @@ class CommentPanel extends Component {
   }
 
   newComment(e) {
-    console.log(e);
     e.preventDefault()
 
     let additions = this.state.additions.slice()
@@ -40,7 +39,6 @@ class CommentPanel extends Component {
       id: new Date(),
       body: this.state.comment
     })
-    console.log(additions);
 
     this.setState({
       comment: "",
@@ -50,7 +48,7 @@ class CommentPanel extends Component {
   }
 
   handleChange(e) {
-    this.setState({comment: e.target.value})
+    this.setState({ comment: e.target.value })
   }
 
 
@@ -67,7 +65,7 @@ class CommentPanel extends Component {
 
     })
 
-    let divStyle = {width:0}
+    let divStyle = { width: 0 }
     switch (this.props.state) {
       case "extended":
         divStyle.width = "50%"

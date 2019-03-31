@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 
 class Tag extends Component {
-  render () {
+  render() {
 
     let tagStyle = {
       cursor: "pointer",
@@ -23,21 +23,21 @@ class Tag extends Component {
 }
 
 class Card extends Component {
-  render () {
+  render() {
 
     let cardStyle = {
-      cursor:"pointer",
+      cursor: "pointer",
     }
 
     let answered = this.props.answered ? <span className="badge badge-primary">Answered</span> : null
     return (
-        <div style={cardStyle} className="card mb-1" onClick={this.props.onClick} id={this.props.id}>
-          <div className="card-body">
-            <h5 className="card-title">{this.props.question} {answered}</h5>
-            <h6 className="card-text">{this.props.body}</h6>
-            <p className="card-subtitle text-muted">Created: {this.props.timeCreated.toDate().toString()}</p>
-          </div>
+      <div style={cardStyle} className="card mb-1" onClick={this.props.onClick} id={this.props.id}>
+        <div className="card-body">
+          <h5 className="card-title">{this.props.question} {answered}</h5>
+          <h6 className="card-text">{this.props.body}</h6>
+          <p className="card-subtitle text-muted">Created: {this.props.timeCreated.toDate().toString()}</p>
         </div>
+      </div>
     )
   }
 }
@@ -67,4 +67,4 @@ class Comment extends Component {
   }
 }
 
-export {Tag, Card, Comment}
+export { Tag, Card, Comment }
