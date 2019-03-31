@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { db, Timestamp } from "./firestore.js";
 
 class HoverForm extends Component {
   style = {
@@ -40,6 +41,8 @@ class HoverForm extends Component {
 
     // bind methods
     this.handleChange = this.handleChange.bind(this)
+    this.submitCard = this.submitCard.bind(this)
+
     this.state = {
       tags: "",
       question: "",
@@ -53,6 +56,18 @@ class HoverForm extends Component {
     this.setState({
       [e.target.id]: value
     })
+  }
+
+  async submitCard() {
+    let newDoc = await db.collection("active").add({
+      tags: this.state.tags,
+      question: this.state.question,
+      body: this.state.body,
+      timeCreated: Timestamp(),
+      answered: false
+    })
+
+    this.props.closeForm()
   }
 
   render() {
@@ -99,7 +114,7 @@ class HoverForm extends Component {
                   <button className="btn btn-warning btn-block" onClick={this.props.closeForm}>Clear and Close</button>
                 </div>
                 <div className="col">
-                  <button className="btn btn-primary btn-block">Submit</button>
+                  <button className="btn btn-primary btn-block" onClick={this.submitCard}>Submit</button>
                 </div>
               </div>
             </div>
