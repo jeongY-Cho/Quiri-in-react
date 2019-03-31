@@ -17,6 +17,7 @@ class CommentPanel extends Component {
       internal: false,
       comment: "",
       additions: [],
+      posting: false
     }
   }
   static getDerivedStateFromProps(props, state) {
@@ -37,18 +38,22 @@ class CommentPanel extends Component {
 
     let additions = this.state.additions.slice()
     const data = {
-      id: new Date(),
       body: this.state.comment,
       timeCreated: Timestamp()
     };
     additions.push(data)
+
+    this.setState({
+      posting: true
+    })
 
     await db.collection("cards").doc(this.props.cardId).collection("comments").add(data)
 
     this.setState({
       comment: "",
       additions,
-      internal: true
+      internal: true,
+      posting: false
     })
   }
 
@@ -58,19 +63,22 @@ class CommentPanel extends Component {
 
 
   render() {
-
-    let title = this.props.cardId
-    let subTitle = "Click a tag to see cards"
-
     let colorLight = true
     let list = this.state.items.map((comment) => {
       colorLight = !colorLight
 
-      return <Comment colorLight={colorLight} key={comment.id} comment={comment.body} timeCreated={comment.timeCreated} id={comment.id} />
+      return (<Comment
+        colorLight={colorLight}
+        key={comment.id}
+        comment={comment.body}
+        timeCreated={comment.timeCreated}
+        id={comment.id}
+      />
+      )
 
     })
 
-    let divStyle = { width: 0 }
+    let divStyle = {}
     switch (this.props.state) {
       case "extended":
         divStyle.width = "50%"
@@ -81,21 +89,26 @@ class CommentPanel extends Component {
       default:
         divStyle.width = "0%"
     }
-    console.log(this.state.additions);
     let additions = this.state.additions.map((comment) => {
       colorLight = !colorLight
-
-      return <Comment colorLight={colorLight} key={comment.id} comment={comment.body} timeCreated={comment.timeCreated} id={comment.id} />
+      return (<Comment
+        posting={this.state.posting}
+        colorLight={colorLight}
+        key={comment.id}
+        comment={comment.body}
+        timeCreated={comment.timeCreated}
+        id={comment.id}
+      />
+      )
 
     })
 
-    // <div id="panel1">{this.props.type} {list}</div>)
     return (
       <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle}>
         <div className="p-2">
-          <h1 className="heading">{title}</h1>
-          <p>{subTitle}<br />{this.state.state}</p>
-          <button className="btn btn-primary" onClick={this.props.closePanel}>X</button>
+          <h1 className="heading">{this.props.question}</h1>
+          <p>{this.props.body}<br />{this.state.state}</p>
+          <button className="btn btn-primary" onClick={this.props.closePanel}>&times;</button>
           <ul id={this.props.type + "List"} className="list-group mb-2">
             {list}
             {additions}

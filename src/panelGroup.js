@@ -35,8 +35,8 @@ class PanelGroup extends Component {
     }
     let commentPanel = {
       type: "comments",
-      title: "Comments",
-      subTitle: "Click a Tag below to view cards with that tag.",
+      question: "Comments",
+      body: "Click a Tag below to view cards with that tag.",
       listItems: {
         items: []
       },
@@ -56,7 +56,15 @@ class PanelGroup extends Component {
     }
   }
 
-
+  static getDerivedStateFromProps(props, state) {
+    if (props.direct) {
+      let returnObj = {}
+      if (props.tagId !== '') { returnObj.tagId = props.tagId }
+      if (props.cardId !== '') { returnObj.cardId = props.cardId }
+      return returnObj
+    }
+    return null
+  }
   async getCardsByTag(e) {
     let tag = e.currentTarget.id
     let cards = await db.collection("Active").doc(tag).collection("cards").get()
@@ -96,13 +104,16 @@ class PanelGroup extends Component {
   async getCommentsByCard(e) {
     let cardId = e.currentTarget.id
     console.log(cardId);
-    let comments = await db
+    let cardRef = await db
       .collection("Active")
       .doc(this.state.tagId)
       .collection("cards")
       .doc(cardId)
-      .collection("comments")
-      .get()
+
+    let docSnapshot = await cardRef.get()
+    let data = docSnapshot.data()
+    let comments = await cardRef.collection("comments").get()
+
     comments = await comments.docs.map(comment => {
       let data = comment.data()
       let body = data.body
@@ -117,6 +128,8 @@ class PanelGroup extends Component {
 
     let commentPanel = Object.assign({}, this.state.commentPanel)
     commentPanel.listItems.items = comments
+    commentPanel.body = data.body
+    commentPanel.question = data.question
     console.log(commentPanel);
     this.setState({
       cardId,
@@ -185,6 +198,8 @@ class PanelGroup extends Component {
             id="commentPanel"
             listItems={this.state.commentPanel.listItems}
             cardId={this.state.cardId}
+            question={this.state.commentPanel.question}
+            body={this.state.commentPanel.body}
           />
 
         </div>
