@@ -78,8 +78,6 @@ class CardPanel extends Component {
         divStyle.width = "0px"
     }
 
-
-    // <div id="panel1">{this.props.type} {list}</div>)
     return (
       <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle}>
         <div className="p-2">
