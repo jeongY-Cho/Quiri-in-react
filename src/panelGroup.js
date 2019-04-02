@@ -56,15 +56,6 @@ class PanelGroup extends Component {
     }
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.direct) {
-      let returnObj = {}
-      if (props.tagId !== '') { returnObj.tagId = props.tagId }
-      if (props.cardId !== '') { returnObj.cardId = props.cardId }
-      return returnObj
-    }
-    return null
-  }
   async getCardsByTag(e) {
     let tagId = e.currentTarget.id
     if (tagId === this.state.tagId) { return }
