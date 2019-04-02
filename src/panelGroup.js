@@ -182,10 +182,11 @@ class PanelGroup extends Component {
     this.setState({
       cardState: "extended",
       tagState: "open",
-      commentState: "closed"
-
+      commentState: "closed",
+      cardId: ''
     })
   }
+
   render() {
 
     return (
