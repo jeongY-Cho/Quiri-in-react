@@ -29,25 +29,26 @@ class CommentPanel extends Component {
       items: props.listItems.items,  //  set any updates
       query: '',                     //  reset query
       internal: false,                // set interal update to false just in case
-      additions: []
     }
   }
 
   async newComment(e) {
-    e.preventDefault()
 
+    if (this.state.comment === '') { return }
     let additions = this.state.additions.slice()
     const data = {
-      body: this.state.comment,
+      comment: this.state.comment,
       timeCreated: Timestamp()
     };
     additions.push(data)
 
     this.setState({
-      posting: true
+      posting: true,
+      internal: true
     })
 
-    await db.collection("cards").doc(this.props.cardId).collection("comments").add(data)
+
+    db.collection("active").doc(this.props.cardId).collection("comments").add(data)
 
     this.setState({
       comment: "",
@@ -58,10 +59,16 @@ class CommentPanel extends Component {
   }
 
   handleChange(e) {
-    this.setState({ comment: e.target.value })
+    this.setState({ comment: e.target.value, internal: true })
   }
 
-
+  componentDidUpdate(prevProps) {
+    if ((prevProps.state === "open" || prevProps.state === "extended") && this.props.state === "closed") {
+      this.setState({
+        additions: []
+      })
+    }
+  }
   render() {
     let colorLight = true
     let list = this.state.items.map((comment) => {
@@ -81,7 +88,7 @@ class CommentPanel extends Component {
     let divStyle = {}
     switch (this.props.state) {
       case "extended":
-        divStyle.width = "50%"
+        divStyle.width = "55%"
         break
       case "open":
         divStyle.width = "25%"
@@ -89,13 +96,15 @@ class CommentPanel extends Component {
       default:
         divStyle.width = "0%"
     }
+
+
     let additions = this.state.additions.map((comment) => {
       colorLight = !colorLight
       return (<Comment
         posting={this.state.posting}
         colorLight={colorLight}
         key={comment.id}
-        comment={comment.body}
+        comment={comment.comment}
         timeCreated={comment.timeCreated}
         id={comment.id}
       />

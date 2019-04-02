@@ -45,7 +45,6 @@ class CardPanel extends Component {
     let query = e.target.value.trim()
     let items = this.searchTags(query)
 
-    console.log(items);
     this.setState({
       query: e.target.value,
       items: items,
@@ -76,7 +75,7 @@ class CardPanel extends Component {
     let divStyle = { width: 0 }
     switch (this.props.state) {
       case "extended":
-        divStyle.width = "40%"
+        divStyle.width = "50%"
         break
       case "open":
         divStyle.width = "25%"

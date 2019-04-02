@@ -44,7 +44,6 @@ class TagPanel extends Component {
     let query = e.target.value.trim()
     let items = this.searchTags(query)
 
-    console.log(items);
     this.setState({
       query: e.target.value,
       items: items,
