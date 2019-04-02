@@ -85,17 +85,17 @@ class HoverForm extends Component {
               </div>
             </div>
             <div className="m-2">
-              <div class="form-group row">
-                <label for="title" className="col-auto col-sm-3 col-md-2 col-form-label text-light">Question</label>
+              <div className="form-group row">
+                <label for="title" className="col-sm-12 col-md-auto col-form-label text-light">Question:</label>
                 <div className="col">
-                  <input class="form-control" type="text" name="Title" value={this.state.question} onChange={this.handleChange} id="question">
+                  <input className="form-control" type="text" name="Title" value={this.state.question} onChange={this.handleChange} id="question">
                   </input>
                 </div>
               </div>
-              <div class="form-group row">
-                <label for="tags" className="col-auto col-sm-3 col-md-2 form-label text-light">Tags</label>
+              <div className="form-group row">
+                <label for="tags" className="col-sm-12 col-md-auto form-label text-light">Tags:</label>
                 <div className="col">
-                  <input class="form-control" type="text" name="tags" value={this.state.tags} onChange={this.handleChange} id="tags">
+                  <input className="form-control" type="text" name="tags" value={this.state.tags} onChange={this.handleChange} id="tags">
                   </input>
                 </div>
               </div>
@@ -106,15 +106,15 @@ class HoverForm extends Component {
               </div>
               <div className="form-group row">
                 <div className="col">
-                  <textarea name="message" class="form-control" id="message" rows="3" onChange={this.handleChange} />
+                  <textarea name="message" className="form-control" id="body" rows="3" onChange={this.handleChange} />
                 </div>
               </div>
-              <div className="form-row">
+              <div className="form-row mb-3">
                 <div className="col">
-                  <button className="btn btn-warning btn-block" onClick={this.props.closeForm}>Clear and Close</button>
+                  <button className="btn btn-warning btn-block" id="close" onClick={this.props.closeForm}>Clear and Close</button>
                 </div>
                 <div className="col">
-                  <button className="btn btn-primary btn-block" onClick={this.submitCard}>Submit</button>
+                  <button className="btn btn-primary btn-block" id="submit" onClick={this.submitCard}>Submit</button>
                 </div>
               </div>
             </div>
