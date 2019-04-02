@@ -66,8 +66,9 @@ class PanelGroup extends Component {
     return null
   }
   async getCardsByTag(e) {
-    let tag = e.currentTarget.id
-    let cards = await db.collection("Active").doc(tag).collection("cards").get()
+    let tagId = e.currentTarget.id
+    if (tagId === this.state.tagId) { return }
+
     cards = cards.docs.map(card => {
       let data = card.data()
 
