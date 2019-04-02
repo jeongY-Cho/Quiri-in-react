@@ -104,7 +104,7 @@ class CommentPanel extends Component {
     })
 
     return (
-      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle}>
+      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle} onMouseEnter={this.props.onMouseEnter}>
         <div className="p-2">
           <h1 className="heading">{this.props.question}</h1>
           <p>{this.props.body}<br />{this.state.state}</p>

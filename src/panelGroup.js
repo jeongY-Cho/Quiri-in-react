@@ -14,6 +14,9 @@ class PanelGroup extends Component {
     this.getCardsByTag = this.getCardsByTag.bind(this)
     this.getCommentsByCard = this.getCommentsByCard.bind(this)
     this.closeCommentPanel = this.closeCommentPanel.bind(this)
+    this.focusTagPanel = this.focusTagPanel.bind(this)
+    this.focusCardPanel = this.focusCardPanel.bind(this)
+    this.focusCommentPanel = this.focusCommentPanel.bind(this)
 
     let tagPanel = {
       type: "tags",
@@ -23,6 +26,7 @@ class PanelGroup extends Component {
         items: []
       },
       onClick: this.getCardsByTag,
+      onScroll: this.focusTagPanel
     }
     let cardPanel = {
       type: "cards",
@@ -32,6 +36,7 @@ class PanelGroup extends Component {
         items: []
       },
       onClick: this.getCommentsByCard,
+      onScroll: this.focusCardPanel
     }
     let commentPanel = {
       type: "comments",
@@ -40,7 +45,8 @@ class PanelGroup extends Component {
       listItems: {
         items: []
       },
-      closePanel: this.closeCommentPanel
+      closePanel: this.closeCommentPanel,
+      onMouseEnter: this.focusCommentPanel
     }
 
 
@@ -92,14 +98,14 @@ class PanelGroup extends Component {
     cardPanel.listItems.items = cards
 
     setTimeout(() => {
-    this.setState({
-      cardPanel: cardPanel,
+      this.setState({
+        cardPanel: cardPanel,
         tagId: tagId,
         cardId: '',
-      tagState: "open",
-      cardState: "extended",
-      commentState: "closed",
-    })
+        tagState: "open",
+        cardState: "extended",
+        commentState: "closed",
+      })
     }, 400)
   }
 
@@ -148,18 +154,58 @@ class PanelGroup extends Component {
     commentPanel.body = data.body
     commentPanel.question = data.question
     setTimeout(() => {
+      this.setState({
+        cardId,
+        commentPanel,
+        tagState: "shrunk",
+        cardState: "open",
+        commentState: "extended"
+      })
+    }, 300)
+  }
+
+  focusTagPanel() {
+    if (this.state.tagId === '') {
+      return
+    } else if (this.state.cardId === '') {
+      this.setState({
+        tagState: "extended",
+        cardState: "open"
+      })
+    } else {
+      this.setState({
+        tagState: "extended",
+        cardState: "open",
+        commentState: "open"
+      })
+    }
+  }
+
+  focusCardPanel() {
+    if (this.state.cardId === '') {
+      this.setState({
+        tagState: "open",
+        cardState: "extended"
+      })
+    } else {
+      this.setState({
+        tagState: "open",
+        cardState: "extended",
+        commentState: "open"
+      })
+    }
+  }
+
+  focusCommentPanel() {
+    console.log("over");
+
     this.setState({
-      cardId,
-      commentPanel,
       tagState: "shrunk",
       cardState: "open",
       commentState: "extended"
     })
-    }, 300)
-  }
 
   }
-
   async componentDidMount() {
 
     let tags = await db.collection("tags").get()
@@ -197,8 +243,10 @@ class PanelGroup extends Component {
             type={this.state.tagPanel.type}
             state={this.state.tagState}
             onClick={this.state.tagPanel.onClick}
+            onScroll={this.state.tagPanel.onScroll}
             id="tagPanel"
             listItems={this.state.tagPanel.listItems}
+            activeTag={this.state.tagId}
           />
           <CardPanel
             className="transitory"
@@ -207,12 +255,15 @@ class PanelGroup extends Component {
             onClick={this.state.cardPanel.onClick}
             id="cardPanel"
             listItems={this.state.cardPanel.listItems}
+            activeCard={this.state.cardId}
+            onScroll={this.state.cardPanel.onScroll}
           />
           <CommentPanel
             className="transitory"
             type={this.state.commentPanel.type}
             state={this.state.commentState}
             onClick={this.state.commentPanel.onClick}
+            onMouseEnter={this.state.commentPanel.onMouseEnter}
             closePanel={this.closeCommentPanel}
             id="commentPanel"
             listItems={this.state.commentPanel.listItems}

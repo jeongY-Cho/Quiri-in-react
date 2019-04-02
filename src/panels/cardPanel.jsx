@@ -63,7 +63,14 @@ class CardPanel extends Component {
     if (list.length === 0) {
       list = (<div><BarLoader /></div>)
     } else {
-      list = list.map((card) => <Card onClick={this.props.onClick} answered={card.answered} key={card.id} id={card.id} timeCreated={card.timeCreated} question={card.question} body={card.body} />)
+      list = list.map((card) => {
+
+        let active = false
+        if (card.id === this.props.activeCard) {
+          active = true
+        }
+        return <Card onClick={this.props.onClick} answered={card.answered} key={card.id} id={card.id} timeCreated={card.timeCreated} question={card.question} body={card.body} active={active} />
+      })
     }
 
     let divStyle = { width: 0 }
@@ -79,7 +86,7 @@ class CardPanel extends Component {
     }
 
     return (
-      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle}>
+      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle} onWheel={this.props.onScroll}>
         <div className="p-2">
           <h1 className="heading">{title}</h1>
           <p>{subTitle}<br />{this.state.state}</p>

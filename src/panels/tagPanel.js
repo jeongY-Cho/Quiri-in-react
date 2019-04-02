@@ -57,7 +57,14 @@ class TagPanel extends Component {
     let title = "Tags"
     let subTitle = "Click a tag to see cards"
 
-    let list = this.state.items.map((tag) => <Tag onClick={this.props.onClick} key={tag.id} tag={tag.tag} id={tag.id} />)
+    let list = this.state.items.map((tag) => {
+      let active = false
+      if (tag.id === this.props.activeTag) {
+        active = true
+      }
+
+      return <Tag onClick={this.props.onClick} key={tag.id} tag={tag.tag} id={tag.id} active={active} />
+    })
 
     let divStyle = { width: 0 }
     let listStyle = { fontSize: "30px" }
@@ -78,7 +85,7 @@ class TagPanel extends Component {
 
 
     return (
-      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle}>
+      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle} onWheel={this.props.onScroll}>
         <div className="p-2">
           <h1>{title}</h1>
           <p>{subTitle}<br />{this.state.state}</p>
