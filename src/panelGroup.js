@@ -105,20 +105,35 @@ class PanelGroup extends Component {
 
   async getCommentsByCard(e) {
     let cardId = e.currentTarget.id
-    console.log(cardId);
+
+    if (cardId === this.state.cardId) { return }
+    this.setState({
+      commentState: "closed",
+      cardId
+    })
     let cardRef = await db
-      .collection("Active")
-      .doc(this.state.tagId)
-      .collection("cards")
+      .collection("active")
       .doc(cardId)
 
-    let docSnapshot = await cardRef.get()
-    let data = docSnapshot.data()
-    let comments = await cardRef.collection("comments").get()
+    console.log(cardId);
 
-    comments = await comments.docs.map(comment => {
+    let docSnapshot = await cardRef.get()
+
+    let data = docSnapshot.data()
+
+
+    let commentsSnapshot = await cardRef.collection("comments").orderBy("timeCreated").get()
+    console.log(commentsSnapshot);
+    console.log(commentsSnapshot.exists);
+
+    let commentsList = []
+    commentsList = commentsSnapshot.docs
+
+    commentsList = commentsList.map(comment => {
       let data = comment.data()
-      let body = data.body
+      console.log(data);
+
+      let body = data.comment
       let timeCreated = data.timeCreated
       let commentId = comment.id
       return {
@@ -129,10 +144,10 @@ class PanelGroup extends Component {
     })
 
     let commentPanel = Object.assign({}, this.state.commentPanel)
-    commentPanel.listItems.items = comments
+    commentPanel.listItems.items = commentsList
     commentPanel.body = data.body
     commentPanel.question = data.question
-    console.log(commentPanel);
+    setTimeout(() => {
     this.setState({
       cardId,
       commentPanel,
@@ -140,6 +155,9 @@ class PanelGroup extends Component {
       cardState: "open",
       commentState: "extended"
     })
+    }, 300)
+  }
+
   }
 
   async componentDidMount() {
