@@ -60,6 +60,13 @@ class PanelGroup extends Component {
     let tagId = e.currentTarget.id
     if (tagId === this.state.tagId) { return }
 
+    this.setState({
+      cardState: "closed",
+      commentState: "closed",
+      tagId
+    })
+    let cardsRef = await db.collection("active")
+    let cards = await cardsRef.where("tags", "array-contains", tagId).orderBy("timeCreated").get()
     cards = cards.docs.map(card => {
       let data = card.data()
 
