@@ -3,6 +3,10 @@ import BarLoader from '@bit/davidhu2000.react-spinners.bar-loader'
 
 
 class Tag extends Component {
+
+  m(classList) {
+    return classList.join(" ")
+  }
   render() {
 
     let tagStyle = {
@@ -15,8 +19,14 @@ class Tag extends Component {
     let h1Style = {
       fontSize: "inherit"
     }
+    let divClass = ["tab", "list-group-item"]
+    if (this.props.active) {
+      divClass.push("bg-primary")
+      divClass.push("text-light")
+    }
+
     return (
-      <div className="tab list-group-item" style={tagStyle} onClick={this.props.onClick} id={this.props.tag}><h1 style={h1Style} className="title">&#9776; {this.props.tag}&nbsp;</h1></div>
+      <div className={this.m(divClass)} style={tagStyle} onClick={this.props.onClick} id={this.props.tag}><h1 style={h1Style} className="title">&#9776; {this.props.tag}&nbsp;</h1></div>
       // <div style={tagStyle} onClick={this.props.onClick} id={this.props.tag} className="title card pl-2 pb-2">&#9776; {this.props.tag}</div>
 
       // <div><button onClick={this.props.onClick}><h1 className="title" id={this.props.tag}>&#9776; {this.props.tag}</h1></button></div>
@@ -26,18 +36,29 @@ class Tag extends Component {
 
 class Card extends Component {
   render() {
-
+    function m(classList) {
+      return classList.join(" ")
+    }
     let cardStyle = {
       cursor: "pointer",
+      transition: "all 0.5s"
+    }
+    let divClass = ["card", "mb-1"]
+    let dateColor = "text-muted";
+    if (this.props.active) {
+      divClass.push("bg-info")
+      divClass.push("text-light")
+      dateColor = "text-light "
     }
 
+    let color;
     let answered = this.props.answered ? <span className="badge badge-primary">Answered</span> : null
     return (
-      <div style={cardStyle} className="card mb-1" onClick={this.props.onClick} id={this.props.id}>
+      <div style={cardStyle} className={m(divClass)} onClick={this.props.onClick} id={this.props.id}>
         <div className="card-body">
-          <h5 className="card-title">{this.props.question} {answered}</h5>
-          <h6 className="card-text">{this.props.body}</h6>
-          <p className="card-subtitle text-muted">Created: {this.props.timeCreated.toDate().toString()}</p>
+          <h5 className={"card-title " + color}>{this.props.question} {answered}</h5>
+          <h6 className={"card-text " + color}>{this.props.body}</h6>
+          <p className={"card-subtitle " + dateColor}>Created: {this.props.timeCreated.toDate().toString()}</p>
         </div>
       </div>
     )
