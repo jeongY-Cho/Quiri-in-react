@@ -91,13 +91,16 @@ class PanelGroup extends Component {
 
     cardPanel.listItems.items = cards
 
+    setTimeout(() => {
     this.setState({
       cardPanel: cardPanel,
-      tagId: tag,
+        tagId: tagId,
+        cardId: '',
       tagState: "open",
       cardState: "extended",
       commentState: "closed",
     })
+    }, 400)
   }
 
   async getCommentsByCard(e) {
