@@ -14,7 +14,6 @@ class HoverForm extends Component {
     },
     form: {
       position: "absolute",
-      height: "50vh",
       width: "50vw",
       top: "25vh",
       left: "25vw",
@@ -59,13 +58,46 @@ class HoverForm extends Component {
   }
 
   async submitCard() {
+    function separateTags(tagString) {
+      let tagList = tagString.split(" ")
+      return tagList.filter((item) => item.length >= 3)
+    }
+
+    let tags = separateTags(this.state.tags)
+
+    if (tags.length === 0) {
+      throw new Error("no valid tags")
+    }
+
     let newDoc = await db.collection("active").add({
-      tags: this.state.tags,
+      tags: tags,
       question: this.state.question,
       body: this.state.body,
       timeCreated: Timestamp(),
       answered: false
     })
+
+    for (let tag of tags) {
+      let tagRef = await db.collection("tags").doc(tag)
+      let tagSnap = await tagRef.get()
+      let tagExists = tagSnap.exists
+
+      if (!tagExists) {
+        let newTag = await db.collection("tags").doc(tag).set({
+          timeCreated: Timestamp(),
+          count: 1,
+          unanswered: 1,
+          answered: 0
+        })
+      } else {
+        let tagData = await tagSnap.data()
+
+        await db.collection("tags").doc(tag).update({
+          count: tagData.count + 1,
+          unanswered: tagData.unanswered + 1
+        })
+      }
+    }
 
     this.props.closeForm({ target: "close" })
   }
