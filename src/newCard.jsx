@@ -67,7 +67,7 @@ class HoverForm extends Component {
       answered: false
     })
 
-    this.props.closeForm()
+    this.props.closeForm({ target: "close" })
   }
 
   render() {
@@ -81,7 +81,7 @@ class HoverForm extends Component {
           <div className="container-fluid">
             <div className="row">
               <div className="col">
-                <h1 className="text-light">Post a Card</h1>
+                <h1 className="text-light text-center">Post a Card</h1>
               </div>
             </div>
             <div className="m-2">

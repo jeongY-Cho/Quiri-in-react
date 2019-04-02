@@ -15,7 +15,9 @@ class App extends Component {
     this.openDirect = this.openDirect.bind(this)
 
     this.state = {
-      showForm: false,
+      showForm: true,
+      cardId: '',
+      tagId: '',
   }
   }
 
@@ -26,7 +28,15 @@ class App extends Component {
     })
     }
 
-  closeForm() {
+  closeForm(e) {
+
+    if (e.target.id === "close") {
+
+    } else {
+      let confirm = window.confirm("Are you sure you want to leave without submitting? Your work will not be saved")
+      if (!confirm) { return }
+    }
+
     this.setState({
       showForm: false
     })
