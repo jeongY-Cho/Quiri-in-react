@@ -115,16 +115,32 @@ class CommentPanel extends Component {
     return (
       <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle} onMouseEnter={this.props.onMouseEnter}>
         <div className="p-2">
-          <h1 className="heading">{this.props.question}</h1>
-          <p>{this.props.body}<br />{this.state.state}</p>
-          <button className="btn btn-primary" onClick={this.props.closePanel}>&times;</button>
-          <ul id={this.props.type + "List"} className="list-group mb-2">
-            {list}
-            {additions}
-          </ul>
-          <div className="form">
-            <textarea className="form-control mb-2" placeholder="Comment here:" rows="5" onChange={this.handleChange} value={this.state.comment} />
-            <button className="btn btn-secondary btn-block" value="something" onClick={this.newComment}>Submit Comment</button>
+          <div className="row">
+            <div className="col">
+              <h1 className="heading">{this.props.question}</h1>
+              <p>{this.props.body}</p>
+            </div>
+            <div className="col-auto">
+              <span style={{ fontSize: "40px", cursor: "pointer" }} className="text-secondary" onClick={this.props.closePanel}>X</span>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <ul id={this.props.type + "List"} className="list-group mb-2">
+                {list}
+                {additions}
+              </ul>
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="col">
+              <textarea className="form-control mb-2" placeholder="Comment here:" rows="5" onChange={this.handleChange} value={this.state.comment} />
+            </div>
+          </div>
+          <div className="form-row">
+            <div className="col">
+              <button className="btn btn-secondary btn-block" value="something" onClick={this.newComment}>Submit Comment</button>
+            </div>
           </div>
         </div>
       </div>
