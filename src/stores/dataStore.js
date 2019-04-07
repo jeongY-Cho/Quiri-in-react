@@ -8,23 +8,25 @@ class DataHandler extends EventEmitter {
 
 
     this.tagItems = []
-    this.cardPanel = {
-      title: "Cards",
-      subTitle: "Click a Tag below to view cards with that tag.",
-      itmes: []
-    }
+    this.cardItems = []
+    this.commentItems = []
+
     this.activeTagId = ''
     this.activeCardId = ''
-    this.commentPanel = {
-      question: "Comments",
-      body: "Click a Tag below to view cards with that tag.",
-      listItems: {
-        items: []
-      },
-      closePanel: this.closeCommentPanel,
-      onMouseEnter: this.focusCommentPanel
-    }
 
+    this.tagPanelState = "extended"
+    this.cardPanelState = "closed"
+    this.commentPanelState = "closed"
+  }
+
+  getTagPanelState() {
+    return this.tagPanelState
+  }
+  getCardPanelState() {
+    return this.cardPanelState
+  }
+  getCommentPanelState() {
+    return this.commentPanelState
   }
   getActiveTagId() {
     return this.activeTagId
@@ -48,7 +50,7 @@ class DataHandler extends EventEmitter {
   }
 
   getCards() {
-    return this.cardPanel
+    return this.cardItems
   }
 
   getComments() {
@@ -68,14 +70,38 @@ class DataHandler extends EventEmitter {
     this.tagItems = this.tagItems.concat(tags)
   }
 
-  gotCardsFromDb(tag, array) {
-    this.cardPanel.title = tag
-    this.cardPanel.items = array
+  gotCardsFromDb(tag, cards) {
+    this.cardItems = cards
     this.activeTagId = tag
+    console.log("gotCardsFromDb");
+
     this.emit("change")
   }
 
-  getCommentsFrom
+  gotCommentsFromDb(cardId, comments) {
+
+  }
+
+  setState(target, state) {
+    switch (target) {
+      case "tagPanel": {
+        this.tagPanelState = state
+        break
+      }
+      case "cardPanel": {
+        this.cardPanelState = state
+        break
+      }
+      case "commentPanel": {
+        this.commentPanelState = state
+        break
+      }
+      default: { }
+    }
+
+    this.emit("change")
+  }
+
   handleActions(action) {
 
     switch (action.type) {
@@ -85,6 +111,12 @@ class DataHandler extends EventEmitter {
       }
       case "GET_CARDS": {
         this.gotCardsFromDb(action.tag, action.items)
+        break
+      }
+      case "SET_STATE": {
+        this.setState(action.target, action.state)
+        console.log("SET_STATE");
+
         break
       }
       default: { }

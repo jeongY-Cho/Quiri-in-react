@@ -17,8 +17,16 @@ export async function initTags() {
   })
 }
 
-export async function getCardsByTag(e) {
-  let tagId = e.currentTarget.id
+export function setState(target, state) {
+  Dispatcher.dispatch({
+    type: "SET_STATE",
+    target,
+    state
+  })
+}
+
+export async function getCardsByTag(tagId) {
+
   let cardsRef = await db.collection("active")
   let cards = await cardsRef.where("tags", "array-contains", tagId).orderBy("timeCreated").get()
 
@@ -43,4 +51,6 @@ export async function getCardsByTag(e) {
   })
 
   Dispatcher.dispatch({ type: "GET_CARDS", items: cards, tag: tagId })
+  setState("cardPanel", "extended")
+  setState("tagPanel", "open")
 }

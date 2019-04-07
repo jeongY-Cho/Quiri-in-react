@@ -12,7 +12,6 @@ class PanelGroup extends Component {
     super(props)
 
     // bind functions
-    this.getCardsByTag = this.getCardsByTag.bind(this)
     this.getCommentsByCard = this.getCommentsByCard.bind(this)
     this.closeCommentPanel = this.closeCommentPanel.bind(this)
     this.focusTagPanel = this.focusTagPanel.bind(this)
@@ -21,60 +20,12 @@ class PanelGroup extends Component {
 
 
     this.state = {
-      activeTagId: '',
-      activeCardId: '',
-      tagState: "extended",
-      cardState: "closed",
-      commentState: "closed"
+      tagState: DataStore.getTagPanelState(),
+      cardState: DataStore.getCardPanelState(),
+      commentState: DataStore.getCommentPanelState()
     }
   }
 
-  async getCardsByTag(e) {
-    let tagId = e.currentTarget.id
-    if (tagId === this.state.tagId) { return }
-
-    this.setState({
-      cardState: "closed",
-      commentState: "closed",
-      tagId
-    })
-    let cardsRef = await db.collection("active")
-    let cards = await cardsRef.where("tags", "array-contains", tagId).orderBy("timeCreated").get()
-    cards = cards.docs.map(card => {
-      let data = card.data()
-
-      let question = data.question
-      let body = data.body
-      if (body.length === 100) {
-        body = body.substring(0, 100) + "..."
-      }
-      let answered = data.answered
-      let timeCreated = data.timeCreated
-
-      return {
-        id: card.id,
-        question,
-        body,
-        answered,
-        timeCreated
-      }
-    })
-
-    let cardPanel = Object.assign({}, this.state.cardPanel)
-
-    cardPanel.listItems.items = cards
-
-    setTimeout(() => {
-      this.setState({
-        cardPanel: cardPanel,
-        tagId: tagId,
-        cardId: '',
-        tagState: "open",
-        cardState: "extended",
-        commentState: "closed",
-      })
-    }, 400)
-  }
 
   async getCommentsByCard(e) {
     let cardId = e.currentTarget.id
@@ -191,12 +142,15 @@ class PanelGroup extends Component {
           <TagPanel
             className="transitory bg-light"
             state={this.state.tagState}
-            onClick={this.getCardsByTag}
             onScroll={this.focusTagPanel}
             id="tagPanel"
-            activeTag={this.state.activeTagId}
           />
-
+          <CardPanel
+            className="transitory bg-light"
+            state={this.state.cardState}
+            onScroll={this.focusCardPanel}
+            id="cardPanel"
+          />
         </div>
       </div>
     )

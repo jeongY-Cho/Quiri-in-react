@@ -7,12 +7,13 @@ class TagPanel extends Component {
   constructor(props) {
     super(props)
     this.handleChange = this.handleChange.bind(this)
-
+    this.onScroll = this.onScroll.bind(this)
 
     this.state = {
       query: "",
       items: [],
-      activeTag: DataStore.getActiveTagId()
+      activeTag: DataStore.getActiveTagId(),
+      state: DataStore.getTagPanelState(),
     }
 
     console.log(this.state);
@@ -44,7 +45,8 @@ class TagPanel extends Component {
     DataStore.on("change", () => {
       this.setState({
         items: DataStore.getTags(),
-        activeTag: DataStore.getActiveTagId()
+        activeTag: DataStore.getActiveTagId(),
+        state: DataStore.getTagPanelState(),
       })
     })
   }
@@ -59,6 +61,16 @@ class TagPanel extends Component {
     })
   }
 
+  onScroll() {
+    if (this.state.state !== "extended") {
+
+      DataActions.setState("tagPanel", "extended")
+      DataActions.setState("cardPanel", "open")
+      if (DataStore.getActiveCardId !== "") {
+        DataActions.setState("commentPanel", "open")
+      }
+    }
+  }
   render() {
 
     let title = "Tags"
@@ -70,12 +82,13 @@ class TagPanel extends Component {
         active = true
       }
 
-      return <Tag onClick={DataActions.getCardsByTag} key={tag.id} tag={tag.tag} id={tag.id} active={active} />
+      return <Tag key={tag.id} tag={tag.tag} id={tag.id} active={active} />
     })
 
     let divStyle = { width: 0 }
     let listStyle = { fontSize: "30px" }
-    switch (this.props.state) {
+
+    switch (this.state.state) {
       case "extended":
         divStyle.width = "50%"
         break
@@ -92,7 +105,7 @@ class TagPanel extends Component {
 
 
     return (
-      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle} onWheel={this.props.onScroll}>
+      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle} onWheel={this.onScroll}>
         <div className="p-2">
           <h1>{title}</h1>
           <p>{subTitle}</p>

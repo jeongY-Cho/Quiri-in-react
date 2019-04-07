@@ -1,32 +1,41 @@
 import React, { Component } from 'react'
 import { Card } from '../listItems.js'
 import BarLoader from '@bit/davidhu2000.react-spinners.bar-loader'
+import DataStore from "../stores/dataStore"
+import * as DataActions from "../actions/dataActions"
 
 class CardPanel extends Component {
   constructor(props) {
     super(props)
+
     this.handleChange = this.handleChange.bind(this)
+    this.onScroll = this.onScroll.bind(this)
 
     this.state = {
       query: "",
-      items: [],
-      internal: false,
-    }
-  }
-  static getDerivedStateFromProps(props, state) {
-    if (state.internal === true) {  //  ignore if internal update to state
-      return { internal: false }
-    }
-    // set props as state if its not an internal update
-    return {
-      items: props.listItems.items,  //  set any updates
-      query: '',                     //  reset query
-      internal: false                // set interal update to false just in case
+      items: DataStore.getCards(),
+      activeTag: DataStore.getActiveTagId(),
+      activeCard: DataStore.getActiveCardId(),
+      state: DataStore.getCardPanelState()
     }
   }
 
+  componentDidMount() {
+    DataStore.on("change", () => {
+      this.setState({
+        items: DataStore.getCards(),
+        state: DataStore.getCardPanelState(),
+        activeTag: DataStore.getActiveTagId(),
+        activeCard: DataStore.getActiveCardId()
+      })
+    })
+  }
+  componentWillUnmount() {
+    DataStore.removeListener("change")
+  }
+
   searchTags(query) {
-    let result = this.props.listItems.items
+    let result = DataStore.getCards().items
       .slice()
       .filter(function (item) {
         let values = Object.values(item)
@@ -52,9 +61,20 @@ class CardPanel extends Component {
     })
   }
 
+  onScroll() {
+    if (this.state.state !== "extended") {
+      DataActions.setState("tagPanel", "open")
+      DataActions.setState("cardPanel", "extended")
+
+      if (this.state.activeCard !== '') {
+        DataActions.setState("commentPanel", "open")
+      }
+    }
+  }
+
   render() {
 
-    let title = "Cards"
+    let tag = this.state.activeTag
     let subTitle = "Click a tag to see comments and answer"
 
     let list = this.state.items
@@ -65,7 +85,7 @@ class CardPanel extends Component {
       list = list.map((card) => {
 
         let active = false
-        if (card.id === this.props.activeCard) {
+        if (card.id === this.state.activeCard) {
           active = true
         }
         return <Card onClick={this.props.onClick} answered={card.answered} key={card.id} id={card.id} timeCreated={card.timeCreated} question={card.question} body={card.body} active={active} />
@@ -73,7 +93,7 @@ class CardPanel extends Component {
     }
 
     let divStyle = { width: 0 }
-    switch (this.props.state) {
+    switch (this.state.state) {
       case "extended":
         divStyle.width = "50%"
         break
@@ -85,9 +105,9 @@ class CardPanel extends Component {
     }
 
     return (
-      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle} onWheel={this.props.onScroll}>
+      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle} onWheel={this.onScroll}>
         <div className="p-2">
-          <h1 className="heading">{title}</h1>
+          <h1 className="heading">Cards for {tag}</h1>
           <p>{subTitle}<br />{this.state.state}</p>
           <div className="mb-2">
             <input type="text" className="form-control" placeholder="Search" id="searchCards" value={this.state.query} onChange={this.handleChange} />

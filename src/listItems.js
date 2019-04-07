@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import BarLoader from '@bit/davidhu2000.react-spinners.bar-loader'
+import * as DataActions from "./actions/dataActions"
 
 
 class Tag extends Component {
@@ -7,12 +8,18 @@ class Tag extends Component {
   m(classList) {
     return classList.join(" ")
   }
+
+  triggerAction(e) {
+    let tag = e.currentTarget.id
+
+    DataActions.getCardsByTag(tag)
+  }
   render() {
 
     let tagStyle = {
       cursor: "pointer",
       fontSize: "inherit",
-      transition: "all 0.5s linear",
+      transition: "all 0.2s ease-out",
       overflowX: "auto",
       whiteSpace: "nowrap",
     }
@@ -26,7 +33,7 @@ class Tag extends Component {
     }
 
     return (
-      <div className={this.m(divClass)} style={tagStyle} onClick={this.props.onClick} id={this.props.tag}><h1 style={h1Style} className="title">&#9776; {this.props.tag}&nbsp;</h1></div>
+      <div className={this.m(divClass)} style={tagStyle} onClick={this.triggerAction} id={this.props.tag}><h1 style={h1Style} className="title">&#9776; {this.props.tag}&nbsp;</h1></div>
       // <div style={tagStyle} onClick={this.props.onClick} id={this.props.tag} className="title card pl-2 pb-2">&#9776; {this.props.tag}</div>
 
       // <div><button onClick={this.props.onClick}><h1 className="title" id={this.props.tag}>&#9776; {this.props.tag}</h1></button></div>
