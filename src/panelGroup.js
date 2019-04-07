@@ -3,6 +3,7 @@ import TagPanel from "./panels/tagPanel.js"
 import CardPanel from "./panels/cardPanel.jsx"
 import CommentPanel from "./panels/commentPanel.js"
 import { db } from "./firestore.js"
+import DataStore from "./stores/dataStore.js"
 
 
 
@@ -18,44 +19,10 @@ class PanelGroup extends Component {
     this.focusCardPanel = this.focusCardPanel.bind(this)
     this.focusCommentPanel = this.focusCommentPanel.bind(this)
 
-    let tagPanel = {
-      type: "tags",
-      title: "Tags",
-      subTitle: "Click a Tag below to view cards with that tag.",
-      listItems: {
-        items: []
-      },
-      onClick: this.getCardsByTag,
-      onScroll: this.focusTagPanel
-    }
-    let cardPanel = {
-      type: "cards",
-      title: "Cards",
-      subTitle: "Click a Tag below to view cards with that tag.",
-      listItems: {
-        items: []
-      },
-      onClick: this.getCommentsByCard,
-      onScroll: this.focusCardPanel
-    }
-    let commentPanel = {
-      type: "comments",
-      question: "Comments",
-      body: "Click a Tag below to view cards with that tag.",
-      listItems: {
-        items: []
-      },
-      closePanel: this.closeCommentPanel,
-      onMouseEnter: this.focusCommentPanel
-    }
-
 
     this.state = {
-      tagPanel: tagPanel,
-      cardPanel: cardPanel,
-      commentPanel: commentPanel,
-      tagId: '',
-      cardId: '',
+      activeTagId: '',
+      activeCardId: '',
       tagState: "extended",
       cardState: "closed",
       commentState: "closed"
@@ -206,23 +173,6 @@ class PanelGroup extends Component {
     })
 
   }
-  async componentDidMount() {
-
-    let tags = await db.collection("tags").get()
-    tags = tags.docs.map(tag => {
-      return {
-        tag: tag.id,
-        id: tag.id
-      }
-    })
-
-    let panel = Object.assign({}, this.state.tagPanel)
-
-    panel.listItems.items = tags
-    this.setState({
-      tagPanel: panel
-    })
-  }
 
   closeCommentPanel(e) {
     this.setState({
@@ -240,36 +190,11 @@ class PanelGroup extends Component {
         <div className="row">
           <TagPanel
             className="transitory bg-light"
-            type={this.state.tagPanel.type}
             state={this.state.tagState}
-            onClick={this.state.tagPanel.onClick}
-            onScroll={this.state.tagPanel.onScroll}
+            onClick={this.getCardsByTag}
+            onScroll={this.focusTagPanel}
             id="tagPanel"
-            listItems={this.state.tagPanel.listItems}
-            activeTag={this.state.tagId}
-          />
-          <CardPanel
-            className="transitory"
-            type={this.state.cardPanel.type}
-            state={this.state.cardState}
-            onClick={this.state.cardPanel.onClick}
-            id="cardPanel"
-            listItems={this.state.cardPanel.listItems}
-            activeCard={this.state.cardId}
-            onScroll={this.state.cardPanel.onScroll}
-          />
-          <CommentPanel
-            className="transitory"
-            type={this.state.commentPanel.type}
-            state={this.state.commentState}
-            onClick={this.state.commentPanel.onClick}
-            onMouseEnter={this.state.commentPanel.onMouseEnter}
-            closePanel={this.closeCommentPanel}
-            id="commentPanel"
-            listItems={this.state.commentPanel.listItems}
-            cardId={this.state.cardId}
-            question={this.state.commentPanel.question}
-            body={this.state.commentPanel.body}
+            activeTag={this.state.activeTagId}
           />
 
         </div>

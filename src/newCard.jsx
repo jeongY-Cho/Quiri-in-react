@@ -50,10 +50,8 @@ class HoverForm extends Component {
   }
 
   handleChange(e) {
-    let value = e.target.value
-
     this.setState({
-      [e.target.id]: value
+      [e.target.id]: e.target.value
     })
   }
 
@@ -69,7 +67,7 @@ class HoverForm extends Component {
       throw new Error("no valid tags")
     }
 
-    let newDoc = await db.collection("active").add({
+    await db.collection("active").add({
       tags: tags,
       question: this.state.question,
       body: this.state.body,
@@ -83,7 +81,7 @@ class HoverForm extends Component {
       let tagExists = tagSnap.exists
 
       if (!tagExists) {
-        let newTag = await db.collection("tags").doc(tag).set({
+        await db.collection("tags").doc(tag).set({
           timeCreated: Timestamp(),
           count: 1,
           unanswered: 1,

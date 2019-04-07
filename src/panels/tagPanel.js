@@ -1,31 +1,27 @@
 import React, { Component } from 'react';
 import { Tag } from "../listItems.js"
+import DataStore from "../stores/dataStore.js"
+import * as DataActions from "../actions/dataActions"
 
 class TagPanel extends Component {
   constructor(props) {
     super(props)
     this.handleChange = this.handleChange.bind(this)
 
+
     this.state = {
       query: "",
       items: [],
-      internal: false,
+      activeTag: DataStore.getActiveTagId()
     }
-  }
-  static getDerivedStateFromProps(props, state) {
-    if (state.internal === true) {  //  ignore if internal update to state
-      return { internal: false }
-    }
-    // set props as state if its not an internal update
-    return {
-      items: props.listItems.items,  //  set any updates
-      query: '',                     //  reset query
-      internal: false                // set interal update to false just in case
-    }
+
+    console.log(this.state);
+
   }
 
+
   searchTags(query) {
-    let result = this.props.listItems.items
+    let result = DataStore.getTags()
       .slice()
       .filter(function (item) {
         let values = Object.values(item)
@@ -38,6 +34,19 @@ class TagPanel extends Component {
         return false
       })
     return result
+
+  }
+
+  componentWillMount() {
+
+    DataActions.initTags()
+
+    DataStore.on("change", () => {
+      this.setState({
+        items: DataStore.getTags(),
+        activeTag: DataStore.getActiveTagId()
+      })
+    })
   }
 
   handleChange(e) {
@@ -47,7 +56,6 @@ class TagPanel extends Component {
     this.setState({
       query: e.target.value,
       items: items,
-      internal: true
     })
   }
 
@@ -58,11 +66,11 @@ class TagPanel extends Component {
 
     let list = this.state.items.map((tag) => {
       let active = false
-      if (tag.id === this.props.activeTag) {
+      if (tag.id === this.state.activeTag) {
         active = true
       }
 
-      return <Tag onClick={this.props.onClick} key={tag.id} tag={tag.tag} id={tag.id} active={active} />
+      return <Tag onClick={DataActions.getCardsByTag} key={tag.id} tag={tag.tag} id={tag.id} active={active} />
     })
 
     let divStyle = { width: 0 }
@@ -87,7 +95,7 @@ class TagPanel extends Component {
       <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle} onWheel={this.props.onScroll}>
         <div className="p-2">
           <h1>{title}</h1>
-          <p>{subTitle}<br />{this.state.state}</p>
+          <p>{subTitle}</p>
           <div className="justify-content-center mb-2">
             <input type="text" className="form-control" placeholder="Search" id="searchTags" value={this.state.query} onChange={this.handleChange} />
           </div>

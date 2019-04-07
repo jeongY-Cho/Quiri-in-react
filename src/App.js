@@ -12,13 +12,12 @@ class App extends Component {
     // bind methods
     this.newCard = this.newCard.bind(this)
     this.closeForm = this.closeForm.bind(this)
-    this.openDirect = this.openDirect.bind(this)
 
     this.state = {
-      showForm: true,
+      showForm: false,
       cardId: '',
       tagId: '',
-  }
+    }
   }
 
 
@@ -26,7 +25,7 @@ class App extends Component {
     this.setState({
       showForm: true
     })
-    }
+  }
 
   closeForm(e) {
 
