@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Comment } from '../listItems.js'
 import { Timestamp, db } from "../firestore.js"
+import * as DataActions from "../actions/dataActions";
+import DataStore from '../stores/dataStore.js';
 
 
 class CommentPanel extends Component {
@@ -10,51 +12,22 @@ class CommentPanel extends Component {
     // bind methods
     this.newComment = this.newComment.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.onMouseEnter = this.onMouseEnter.bind(this)
 
     this.state = {
       query: "",
-      items: [],
-      internal: false,
-      comment: "",
-      additions: [],
-      posting: false
-    }
-  }
-  static getDerivedStateFromProps(props, state) {
-    if (state.internal === true) {  //  ignore if internal update to state
-      return { internal: false }
-    }
-    // set props as state if its not an internal update
-    return {
-      items: props.listItems.items,  //  set any updates
-      query: '',                     //  reset query
-      internal: false,                // set interal update to false just in case
+      items: DataStore.getComments(),
+      posting: false,
+      state: DataStore.getCommentPanelState(),
+      cardData: DataStore.getActiveCardData(),
+      comment: ''
     }
   }
 
   async newComment(e) {
-
-    if (this.state.comment === '') { return }
-    let additions = this.state.additions.slice()
-    const data = {
-      comment: this.state.comment,
-      timeCreated: Timestamp()
-    };
-    additions.push(data)
-
+    DataActions.newComment(this.state.cardData.id, this.state.comment)
     this.setState({
-      posting: true,
-      internal: true
-    })
-
-
-    db.collection("active").doc(this.props.cardId).collection("comments").add(data)
-
-    this.setState({
-      comment: "",
-      additions,
-      internal: true,
-      posting: false
+      comment: ''
     })
   }
 
@@ -62,14 +35,30 @@ class CommentPanel extends Component {
     this.setState({ comment: e.target.value, internal: true })
   }
 
-  componentDidUpdate(prevProps) {
-    if ((prevProps.state === "open" || prevProps.state === "extended") && this.props.state === "closed") {
+  componentDidMount() {
+    DataStore.on("change", () => {
       this.setState({
-        additions: []
+        items: DataStore.getComments(),
+        state: DataStore.getCommentPanelState(),
+        cardData: DataStore.getActiveCardData()
       })
-    }
+    })
+
+  }
+
+  onMouseEnter() {
+    if (this.state.state === "extended") return
+    DataActions.setState("tagPanel", "shrunk")
+    DataActions.setState("cardPanel", "open")
+    DataActions.setState("commentPanel", "extended")
+  }
+
+  closePanel(e) {
+    DataActions.closeComments()
   }
   render() {
+
+
     let colorLight = true
     let list = this.state.items.map((comment) => {
       colorLight = !colorLight
@@ -77,7 +66,7 @@ class CommentPanel extends Component {
       return (<Comment
         colorLight={colorLight}
         key={comment.id}
-        comment={comment.body}
+        comment={comment.comment}
         timeCreated={comment.timeCreated}
         id={comment.id}
       />
@@ -86,7 +75,7 @@ class CommentPanel extends Component {
     })
 
     let divStyle = {}
-    switch (this.props.state) {
+    switch (this.state.state) {
       case "extended":
         divStyle.width = "55%"
         break
@@ -98,37 +87,22 @@ class CommentPanel extends Component {
     }
 
 
-    let additions = this.state.additions.map((comment) => {
-      colorLight = !colorLight
-      return (<Comment
-        posting={this.state.posting}
-        colorLight={colorLight}
-        key={comment.id}
-        comment={comment.comment}
-        timeCreated={comment.timeCreated}
-        id={comment.id}
-      />
-      )
-
-    })
-
     return (
-      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle} onMouseEnter={this.props.onMouseEnter}>
+      <div id={this.props.type + "Panel"} className={this.props.className} style={divStyle} onMouseEnter={this.onMouseEnter}>
         <div className="p-2">
           <div className="row">
             <div className="col">
-              <h1 className="heading">{this.props.question}</h1>
-              <p>{this.props.body}</p>
+              <h1 className="heading">{this.state.cardData.question}</h1>
+              <p>{this.state.cardData.body}</p>
             </div>
             <div className="col-auto">
-              <span style={{ fontSize: "40px", cursor: "pointer" }} className="text-secondary" onClick={this.props.closePanel}>X</span>
+              <span style={{ fontSize: "40px", cursor: "pointer" }} className="text-secondary" onClick={this.closePanel}>X</span>
             </div>
           </div>
           <div className="row">
             <div className="col">
               <ul id={this.props.type + "List"} className="list-group mb-2">
                 {list}
-                {additions}
               </ul>
             </div>
           </div>

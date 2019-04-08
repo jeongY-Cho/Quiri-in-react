@@ -4,7 +4,6 @@ import * as DataActions from "./actions/dataActions"
 
 
 class Tag extends Component {
-
   m(classList) {
     return classList.join(" ")
   }
@@ -42,13 +41,20 @@ class Tag extends Component {
 }
 
 class Card extends Component {
+
+  onClick(e) {
+    let cardId = e.currentTarget.id
+    DataActions.getCommentsByCard(cardId)
+    DataActions.setActiveCardData(cardId)
+  }
+
   render() {
     function m(classList) {
       return classList.join(" ")
     }
     let cardStyle = {
       cursor: "pointer",
-      transition: "all 0.5s"
+      transition: "all 0.5s",
     }
     let divClass = ["card", "mb-1"]
     let dateColor = "text-muted";
@@ -61,7 +67,7 @@ class Card extends Component {
     let color;
     let answered = this.props.answered ? <span className="badge badge-primary">Answered</span> : null
     return (
-      <div style={cardStyle} className={m(divClass)} onClick={this.props.onClick} id={this.props.id}>
+      <div style={cardStyle} className={m(divClass)} onClick={this.onClick} id={this.props.id}>
         <div className="card-body">
           <h5 className={"card-title " + color}>{this.props.question} {answered}</h5>
           <h6 className={"card-text " + color}>{this.props.body}</h6>

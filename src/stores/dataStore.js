@@ -14,6 +14,14 @@ class DataHandler extends EventEmitter {
     this.activeTagId = ''
     this.activeCardId = ''
 
+    this.activeCardData = {
+      question: '',
+      body: '',
+      timeCreated: '',
+      answer: '',
+      timeAnswered: '',
+    }
+
     this.tagPanelState = "extended"
     this.cardPanelState = "closed"
     this.commentPanelState = "closed"
@@ -54,9 +62,12 @@ class DataHandler extends EventEmitter {
   }
 
   getComments() {
-    return this.commentPanel
+    return this.commentItems
   }
 
+  getActiveCardData() {
+    return this.activeCardData
+  }
   newTag(input) {
     this.tagItems.push({
       id: input.id,
@@ -73,16 +84,25 @@ class DataHandler extends EventEmitter {
   gotCardsFromDb(tag, cards) {
     this.cardItems = cards
     this.activeTagId = tag
-    console.log("gotCardsFromDb");
 
     this.emit("change")
   }
 
   gotCommentsFromDb(cardId, comments) {
+    this.commentItems = comments
+    this.activeCardId = cardId
 
+    this.emit("change")
+  }
+
+  newComment(data) {
+    this.commentItems.push(data)
+
+    this.emit("change")
   }
 
   setState(target, state) {
+
     switch (target) {
       case "tagPanel": {
         this.tagPanelState = state
@@ -102,6 +122,18 @@ class DataHandler extends EventEmitter {
     this.emit("change")
   }
 
+  closeComments() {
+    this.activeCardData = {};
+    this.activeCardId = '';
+    this.commentItems = []
+
+    this.setState("tagPanel", "open");
+    this.setState("cardPanel", "extended");
+    this.setState("commentPanel", "closed");
+
+    this.emit("change");
+  }
+
   handleActions(action) {
 
     switch (action.type) {
@@ -109,19 +141,42 @@ class DataHandler extends EventEmitter {
         this.gotTagsFromDb(action.items)
         break
       }
+
       case "GET_CARDS": {
         this.gotCardsFromDb(action.tag, action.items)
         break
       }
+
+      case "GET_COMMENTS": {
+        this.gotCommentsFromDb(action.cardId, action.items)
+        break
+      }
+
       case "SET_STATE": {
         this.setState(action.target, action.state)
-        console.log("SET_STATE");
+        break
+      }
 
+      case "NEW_COMMENT": {
+        this.newComment(action.item)
+        break
+      }
+
+      case "SET_CARD_DATA": {
+        this.activeCardData = action.data
+
+        this.emit("change")
+        break
+      }
+
+      case "CLOSE_COMMENTS": {
+        this.closeComments();
         break
       }
       default: { }
     }
   }
+
 }
 
 const dataStore = new DataHandler();

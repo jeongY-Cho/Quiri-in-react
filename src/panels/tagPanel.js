@@ -16,7 +16,6 @@ class TagPanel extends Component {
       state: DataStore.getTagPanelState(),
     }
 
-    console.log(this.state);
 
   }
 
@@ -66,7 +65,7 @@ class TagPanel extends Component {
 
       DataActions.setState("tagPanel", "extended")
       DataActions.setState("cardPanel", "open")
-      if (DataStore.getActiveCardId !== "") {
+      if (DataStore.getActiveCardId() !== "") {
         DataActions.setState("commentPanel", "open")
       }
     }
